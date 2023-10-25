@@ -2,7 +2,6 @@ import com.github.javafaker.Faker;
 import io.qameta.allure.Feature;
 import io.qameta.allure.Severity;
 import io.qameta.allure.SeverityLevel;
-import io.qameta.allure.Story;
 import io.qameta.allure.junit4.DisplayName;
 import org.junit.Test;
 import pages.MainPage;
@@ -43,6 +42,5 @@ public class RegisterTest extends BaseTest {
         registerPage.setPassInput("1");
         registerPage.clickRegistrationButton();
         registerPage.shouldIncorrectPassError("Некорректный пароль");
-
     }
 }

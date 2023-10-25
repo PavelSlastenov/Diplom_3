@@ -1,14 +1,18 @@
 import io.qameta.allure.Feature;
 import io.qameta.allure.Severity;
 import io.qameta.allure.SeverityLevel;
-import io.qameta.allure.Story;
 import io.qameta.allure.junit4.DisplayName;
 import org.junit.Test;
 import pages.MainPage;
 import pages.ProfilePage;
 
+import static helpers.AuthData.email;
+import static helpers.AuthData.password;
+
 @DisplayName("Страница: \"Профиль\"")
 public class ProfileTest extends BaseTest {
+    private static String shouldBurgerTitle = "Соберите бургер";
+
     @Test
     @Feature("Profile")
     @Severity(SeverityLevel.CRITICAL)
@@ -17,7 +21,7 @@ public class ProfileTest extends BaseTest {
         MainPage mainPage = new MainPage(driver);
         ProfilePage profilePage = new ProfilePage(driver);
         mainPage.clickPersonalAreaButton();
-        mainPage.Auth("andrey@yandex.ru", "password");
+        mainPage.Auth(email, password);
         mainPage.clickPersonalAreaButton();
         mainPage.waitVisibleProfileText();
         mainPage.shouldProfileText();
@@ -34,29 +38,27 @@ public class ProfileTest extends BaseTest {
         MainPage mainPage = new MainPage(driver);
         ProfilePage profilePage = new ProfilePage(driver);
         mainPage.clickPersonalAreaButton();
-        mainPage.Auth("andrey@yandex.ru", "password");
+        mainPage.Auth(email, password);
         mainPage.clickPersonalAreaButton();
         mainPage.waitVisibleProfileText();
         mainPage.shouldProfileText();
         profilePage.clickConstructorButton();
-        profilePage.shouldBurgerTitle("Соберите бургер");
+        profilePage.shouldBurgerTitle(shouldBurgerTitle);
     }
 
     @Test
     @Feature("Profile")
-    @Story("Profile")
     @Severity(SeverityLevel.CRITICAL)
     @DisplayName("Проверка перехода из профиля в конструктор через логотип")
     public void logoTest() {
         MainPage mainPage = new MainPage(driver);
         ProfilePage profilePage = new ProfilePage(driver);
         mainPage.clickPersonalAreaButton();
-        mainPage.Auth("andrey@yandex.ru", "password");
+        mainPage.Auth(email, password);
         mainPage.clickPersonalAreaButton();
         mainPage.waitVisibleProfileText();
         mainPage.shouldProfileText();
         profilePage.clickLogo();
-        profilePage.shouldBurgerTitle("Соберите бургер");
+        profilePage.shouldBurgerTitle(shouldBurgerTitle);
     }
-
 }
