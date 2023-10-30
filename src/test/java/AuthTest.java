@@ -12,7 +12,6 @@ import pages.RegisterPage;
 @DisplayName("Авторизация")
 public class AuthTest extends BaseTest {
     Faker faker = new Faker();
-    ProfilePage profilePage = new ProfilePage(driver);
 
     @Test
     @Feature("Auth")
@@ -34,8 +33,6 @@ public class AuthTest extends BaseTest {
         mainPage.clickPersonalAreaButton();
         mainPage.waitVisibleProfileText();
         mainPage.shouldProfileText();
-//        mainPage.clickPersonalAreaButton();
-//        profilePage.clickExitButton();
     }
 
     @Test
@@ -58,8 +55,6 @@ public class AuthTest extends BaseTest {
         mainPage.clickPersonalAreaButton();
         mainPage.waitVisibleProfileText();
         mainPage.shouldProfileText();
-//        mainPage.clickPersonalAreaButton();
-//        profilePage.clickExitButton();
     }
 
     @Test
@@ -85,8 +80,6 @@ public class AuthTest extends BaseTest {
         mainPage.clickPersonalAreaButton();
         mainPage.waitVisibleProfileText();
         mainPage.shouldProfileText();
-//        mainPage.clickPersonalAreaButton();
-//        profilePage.clickExitButton();
     }
 
     @Test
@@ -111,7 +104,5 @@ public class AuthTest extends BaseTest {
         mainPage.clickPersonalAreaButton();
         mainPage.waitVisibleProfileText();
         mainPage.shouldProfileText();
-//        mainPage.clickPersonalAreaButton();
-//        profilePage.clickExitButton();
     }
 }

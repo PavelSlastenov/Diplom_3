@@ -13,4 +13,8 @@ Java-11
 - Allure-maven_2.10.0
 
 #### Команда для запуска тестов: ####
-- mvn clean test
+- mvn -Dwebdriver.chrome.driver=/opt/chromedriver/chromedriver \
+  -Dwebdriver.chrome.binary=/opt/chrome-for-testing/chrome \
+  -Dwebdriver.yandex.driver=/opt/chromedriver/chromedriver-116 \
+  -Dwebdriver.yandex.binary=/usr/bin/yandex-browser \
+  -Dbrowser=yandex test
