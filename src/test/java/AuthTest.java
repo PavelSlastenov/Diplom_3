@@ -3,6 +3,7 @@ import io.qameta.allure.Feature;
 import io.qameta.allure.Severity;
 import io.qameta.allure.SeverityLevel;
 import io.qameta.allure.junit4.DisplayName;
+import org.junit.Rule;
 import org.junit.Test;
 import pages.MainPage;
 import pages.ProfilePage;
@@ -12,6 +13,9 @@ import pages.RegisterPage;
 @DisplayName("Авторизация")
 public class AuthTest extends BaseTest {
     Faker faker = new Faker();
+
+    @Rule
+    public DriverRule driverRule = new DriverRule();
 
     @Test
     @Feature("Auth")

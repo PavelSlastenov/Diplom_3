@@ -1,11 +1,15 @@
 import io.qameta.allure.Severity;
 import io.qameta.allure.SeverityLevel;
 import io.qameta.allure.junit4.DisplayName;
+import org.junit.Rule;
 import org.junit.Test;
 import pages.MainPage;
 
 @DisplayName("Конструктор")
 public class MainTest extends BaseTest {
+    @Rule
+    public DriverRule driverRule = new DriverRule();
+
     @Test
     @Severity(SeverityLevel.CRITICAL)
     @DisplayName("Проверка перехода в раздел: Соусы")
