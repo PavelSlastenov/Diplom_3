@@ -46,4 +46,8 @@ public class ProfilePage {
         new WebDriverWait(driver, 3)
                 .until(ExpectedConditions.elementToBeClickable(authText));
     }
+
+    public void exit() {
+        driver.findElement(exitButton).click();
+    }
 }
