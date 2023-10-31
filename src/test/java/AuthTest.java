@@ -22,7 +22,6 @@ public class AuthTest extends BaseTest {
     private boolean isRegistered;
     private LoginUser loginData;
 
-
 //    @Rule
 //    public DriverRule driverRule = new DriverRule();
 
