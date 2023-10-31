@@ -9,6 +9,7 @@ import io.qameta.allure.junit4.DisplayName;
 import io.restassured.response.ValidatableResponse;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import pages.MainPage;
 import pages.ProfilePage;
@@ -21,8 +22,8 @@ public class ProfileTest extends BaseTest {
     private boolean isRegistered;
     private LoginUser loginData;
 
-//    @Rule
-//    public DriverRule driverRule = new DriverRule();
+    @Rule
+    public DriverRule driverRule = new DriverRule();
 
     private static String shouldBurgerTitle = "Соберите бургер";
 

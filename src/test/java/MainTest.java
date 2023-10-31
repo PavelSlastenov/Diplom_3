@@ -7,8 +7,8 @@ import pages.MainPage;
 
 @DisplayName("Конструктор")
 public class MainTest extends BaseTest {
-//    @Rule
-//    public DriverRule driverRule = new DriverRule();
+    @Rule
+    public DriverRule driverRule = new DriverRule();
 
     @Test
     @Severity(SeverityLevel.CRITICAL)
