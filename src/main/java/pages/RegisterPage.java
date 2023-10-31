@@ -9,13 +9,10 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 public class RegisterPage {
     private final WebDriver driver;
 
-
     private final By registerButton = By.xpath("//a[@href='/register']");
     private final By nameInput = By.xpath("//input[@name='name']");
     private final By emailInput = By.xpath("//label[text()='Email']/following::input");
     private final By passInput = By.xpath("//input[@type='password']");
-
-
     private final By registrationButton = By.xpath("//button[text()='Зарегистрироваться']");
     private final By authText = By.xpath("//h2[text()='Вход']");
     private final By incorrectPassError = By.xpath("//p[text()='Некорректный пароль']");

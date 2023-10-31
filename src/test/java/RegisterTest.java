@@ -3,7 +3,6 @@ import io.qameta.allure.Feature;
 import io.qameta.allure.Severity;
 import io.qameta.allure.SeverityLevel;
 import io.qameta.allure.junit4.DisplayName;
-import org.junit.Rule;
 import org.junit.Test;
 import pages.MainPage;
 import pages.RegisterPage;
@@ -12,9 +11,6 @@ import pages.RegisterPage;
 public class RegisterTest extends BaseTest {
     Faker faker = new Faker();
 
-    @Rule
-    public DriverRule driverRule = new DriverRule();
-
     @Test
     @Feature("Registration")
     @Severity(SeverityLevel.CRITICAL)
@@ -22,6 +18,7 @@ public class RegisterTest extends BaseTest {
     public void registrationTest() {
         MainPage mainPage = new MainPage(driver);
         RegisterPage registerPage = new RegisterPage(driver);
+
         mainPage.clickPersonalAreaButton();
         registerPage.clickRegisterButton();
         registerPage.setNameInput(faker.name().firstName());
@@ -39,6 +36,7 @@ public class RegisterTest extends BaseTest {
     public void registrationIncorrectPassTest() {
         MainPage mainPage = new MainPage(driver);
         RegisterPage registerPage = new RegisterPage(driver);
+
         mainPage.clickPersonalAreaButton();
         registerPage.clickRegisterButton();
         registerPage.setNameInput(faker.name().firstName());

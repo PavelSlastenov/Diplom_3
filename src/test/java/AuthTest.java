@@ -1,21 +1,41 @@
-import com.github.javafaker.Faker;
+import models.LoginUser;
+import models.RegisterUser;
+import helpers.UserClient;
+import helpers.UserGenerator;
 import io.qameta.allure.Feature;
 import io.qameta.allure.Severity;
 import io.qameta.allure.SeverityLevel;
 import io.qameta.allure.junit4.DisplayName;
-import org.junit.Rule;
+import io.restassured.response.ValidatableResponse;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import pages.MainPage;
-import pages.ProfilePage;
 import pages.RegisterPage;
 
 
 @DisplayName("Авторизация")
 public class AuthTest extends BaseTest {
-    Faker faker = new Faker();
+    private RegisterUser registerData;
+    private String token = "";
+    private int statusCode;
+    private boolean isRegistered;
+    private LoginUser loginData;
 
-    @Rule
-    public DriverRule driverRule = new DriverRule();
+
+//    @Rule
+//    public DriverRule driverRule = new DriverRule();
+
+    @Before
+    public void setUp(){
+        registerData = UserGenerator.getDefaultRegistrationData();
+        ValidatableResponse responseRegister = UserClient.registerUser(registerData);
+
+        token = responseRegister.extract().path("accessToken");
+        statusCode = responseRegister.extract().statusCode();
+        isRegistered = responseRegister.extract().path("success");
+        loginData = UserGenerator.getDefaultLoginData();
+    }
 
     @Test
     @Feature("Auth")
@@ -24,15 +44,9 @@ public class AuthTest extends BaseTest {
     public void authTest() {
         MainPage mainPage = new MainPage(driver);
 
-        String name = faker.name().firstName();
-        String email = faker.internet().emailAddress();
-        String password = faker.internet().password();
-
         mainPage.clickPersonalAreaButton();
-        mainPage.createUser(name, email, password);
-        mainPage.waitVisibleInputText();
-        mainPage.setEmailInput(email);
-        mainPage.setPassInput(password);
+        mainPage.setEmailInput(loginData.getEmail());
+        mainPage.setPassInput(loginData.getPassword());
         mainPage.clickLoginButton();
         mainPage.clickPersonalAreaButton();
         mainPage.waitVisibleProfileText();
@@ -46,15 +60,9 @@ public class AuthTest extends BaseTest {
     public void authMainButtonTest() {
         MainPage mainPage = new MainPage(driver);
 
-        String name = faker.name().firstName();
-        String email = faker.internet().emailAddress();
-        String password = faker.internet().password();
-
         mainPage.clickLoginOrderButton();
-        mainPage.createUser(name, email, password);
-        mainPage.waitVisibleInputText();
-        mainPage.setEmailInput(email);
-        mainPage.setPassInput(password);
+        mainPage.setEmailInput(loginData.getEmail());
+        mainPage.setPassInput(loginData.getPassword());
         mainPage.clickLoginButton();
         mainPage.clickPersonalAreaButton();
         mainPage.waitVisibleProfileText();
@@ -69,17 +77,11 @@ public class AuthTest extends BaseTest {
         MainPage mainPage = new MainPage(driver);
         RegisterPage registerPage = new RegisterPage(driver);
 
-        String name = faker.name().firstName();
-        String email = faker.internet().emailAddress();
-        String password = faker.internet().password();
-
         mainPage.clickLoginOrderButton();
         registerPage.clickRegisterButton();
         mainPage.clickLoginRegistrationButton();
-        mainPage.createUser(name, email, password);
-        mainPage.waitVisibleInputText();
-        mainPage.setEmailInput(email);
-        mainPage.setPassInput(password);
+        mainPage.setEmailInput(loginData.getEmail());
+        mainPage.setPassInput(loginData.getPassword());
         mainPage.clickLoginButton();
         mainPage.clickPersonalAreaButton();
         mainPage.waitVisibleProfileText();
@@ -93,20 +95,19 @@ public class AuthTest extends BaseTest {
     public void authForgotFormButtonTest() {
         MainPage mainPage = new MainPage(driver);
 
-        String name = faker.name().firstName();
-        String email = faker.internet().emailAddress();
-        String password = faker.internet().password();
-
         mainPage.clickLoginOrderButton();
         mainPage.clickForgotPassButton();
         mainPage.clickLoginForgotButton();
-        mainPage.createUser(name, email, password);
-        mainPage.waitVisibleInputText();
-        mainPage.setEmailInput(email);
-        mainPage.setPassInput(password);
+        mainPage.setEmailInput(loginData.getEmail());
+        mainPage.setPassInput(loginData.getPassword());
         mainPage.clickLoginButton();
         mainPage.clickPersonalAreaButton();
         mainPage.waitVisibleProfileText();
         mainPage.shouldProfileText();
+    }
+
+    @After
+    public void tearDown(){
+        ValidatableResponse responseDelete = UserClient.deleteUser(token);
     }
 }

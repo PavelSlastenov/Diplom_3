@@ -1,21 +1,41 @@
-import com.github.javafaker.Faker;
+import models.LoginUser;
+import models.RegisterUser;
+import helpers.UserClient;
+import helpers.UserGenerator;
 import io.qameta.allure.Feature;
 import io.qameta.allure.Severity;
 import io.qameta.allure.SeverityLevel;
 import io.qameta.allure.junit4.DisplayName;
-import org.junit.Rule;
+import io.restassured.response.ValidatableResponse;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import pages.MainPage;
 import pages.ProfilePage;
 
 @DisplayName("Страница: \"Профиль\"")
 public class ProfileTest extends BaseTest {
-    Faker faker = new Faker();
+    private RegisterUser registerData;
+    private String token = "";
+    private int statusCode;
+    private boolean isRegistered;
+    private LoginUser loginData;
 
-    @Rule
-    public DriverRule driverRule = new DriverRule();
+//    @Rule
+//    public DriverRule driverRule = new DriverRule();
 
     private static String shouldBurgerTitle = "Соберите бургер";
+
+    @Before
+    public void setUp(){
+        registerData = UserGenerator.getDefaultRegistrationData();
+        ValidatableResponse responseRegister = UserClient.registerUser(registerData);
+
+        token = responseRegister.extract().path("accessToken");
+        statusCode = responseRegister.extract().statusCode();
+        isRegistered = responseRegister.extract().path("success");
+        loginData = UserGenerator.getDefaultLoginData();
+    }
 
     @Test
     @Feature("Profile")
@@ -25,14 +45,8 @@ public class ProfileTest extends BaseTest {
         MainPage mainPage = new MainPage(driver);
         ProfilePage profilePage = new ProfilePage(driver);
 
-        String name = faker.name().firstName();
-        String email = faker.internet().emailAddress();
-        String password = faker.internet().password();
-
         mainPage.clickPersonalAreaButton();
-        mainPage.createUser(name, email, password);
-        mainPage.waitVisibleInputText();
-        mainPage.auth(email, password);
+        mainPage.auth(loginData.getEmail(), loginData.getPassword());
         mainPage.clickPersonalAreaButton();
         mainPage.waitVisibleProfileText();
         mainPage.shouldProfileText();
@@ -49,19 +63,13 @@ public class ProfileTest extends BaseTest {
         MainPage mainPage = new MainPage(driver);
         ProfilePage profilePage = new ProfilePage(driver);
 
-        String name = faker.name().firstName();
-        String email = faker.internet().emailAddress();
-        String password = faker.internet().password();
-
         mainPage.clickPersonalAreaButton();
-        mainPage.createUser(name, email, password);
-        mainPage.waitVisibleInputText();
-        mainPage.auth(email, password);
+        mainPage.auth(loginData.getEmail(), loginData.getPassword());
         mainPage.clickPersonalAreaButton();
         mainPage.waitVisibleProfileText();
         mainPage.shouldProfileText();
         profilePage.clickConstructorButton();
-        profilePage.shouldBurgerTitle(shouldBurgerTitle);
+        profilePage.shouldBurgerTitle("Соберите бургер");
     }
 
     @Test
@@ -72,18 +80,17 @@ public class ProfileTest extends BaseTest {
         MainPage mainPage = new MainPage(driver);
         ProfilePage profilePage = new ProfilePage(driver);
 
-        String name = faker.name().firstName();
-        String email = faker.internet().emailAddress();
-        String password = faker.internet().password();
-
         mainPage.clickPersonalAreaButton();
-        mainPage.createUser(name, email, password);
-        mainPage.waitVisibleInputText();
-        mainPage.auth(email, password);
+        mainPage.auth(loginData.getEmail(), loginData.getPassword());
         mainPage.clickPersonalAreaButton();
         mainPage.waitVisibleProfileText();
         mainPage.shouldProfileText();
         profilePage.clickLogo();
-        profilePage.shouldBurgerTitle(shouldBurgerTitle);
+        profilePage.shouldBurgerTitle("Соберите бургер");
+    }
+
+    @After
+    public void tearDown(){
+        ValidatableResponse responseDelete = UserClient.deleteUser(token);
     }
 }

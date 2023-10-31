@@ -10,7 +10,6 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 public class ProfilePage {
     private final WebDriver driver;
 
-
     private final By constructorButton = By.xpath("//p[text()='Конструктор']");
     private final By exitButton = By.xpath("//button[text()='Выход']");
     private final By authText = By.xpath("//h2[text()='Вход']");
