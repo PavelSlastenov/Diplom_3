@@ -1,8 +1,13 @@
-import com.github.javafaker.Faker;
+import helpers.UserClient;
+import helpers.UserGenerator;
 import io.qameta.allure.Feature;
 import io.qameta.allure.Severity;
 import io.qameta.allure.SeverityLevel;
 import io.qameta.allure.junit4.DisplayName;
+import io.restassured.response.ValidatableResponse;
+import models.LoginUser;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import pages.MainPage;
@@ -10,10 +15,16 @@ import pages.RegisterPage;
 
 @DisplayName("Страница: \"Регистрация\"")
 public class RegisterTest extends BaseTest {
-    Faker faker = new Faker();
+    private String token = "";
+    private LoginUser loginData;
 
     @Rule
     public DriverRule driverRule = new DriverRule();
+
+    @Before
+    public void setUp(){
+        loginData = UserGenerator.getDefaultLoginData();
+    }
 
     @Test
     @Feature("Registration")
@@ -25,12 +36,15 @@ public class RegisterTest extends BaseTest {
 
         mainPage.clickPersonalAreaButton();
         registerPage.clickRegisterButton();
-        registerPage.setNameInput(faker.name().firstName());
-        registerPage.setEmailInput(faker.internet().emailAddress());
-        registerPage.setPassInput(faker.internet().password());
+        registerPage.setNameInput(loginData.getName());
+        registerPage.setEmailInput(loginData.getEmail());
+        registerPage.setPassInput(loginData.getPassword());
         registerPage.clickRegistrationButton();
         registerPage.waitVisibleAuthText();
         registerPage.shouldAuthText("Вход");
+
+        ValidatableResponse responseRegister = UserClient.loginUser(loginData);
+        token = responseRegister.extract().path("accessToken");
     }
 
     @Test
@@ -43,10 +57,15 @@ public class RegisterTest extends BaseTest {
 
         mainPage.clickPersonalAreaButton();
         registerPage.clickRegisterButton();
-        registerPage.setNameInput(faker.name().firstName());
-        registerPage.setEmailInput(faker.internet().emailAddress());
+        registerPage.setNameInput(loginData.getName());
+        registerPage.setEmailInput(loginData.getEmail());
         registerPage.setPassInput("1");
         registerPage.clickRegistrationButton();
         registerPage.shouldIncorrectPassError("Некорректный пароль");
+    }
+
+    @After
+    public void tearDown(){
+        ValidatableResponse responseDelete = UserClient.deleteUser(token);
     }
 }
